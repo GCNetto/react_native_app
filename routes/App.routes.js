@@ -2,8 +2,8 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
-import Tarefas from '../pages/Tarefas';
-import Dashboard from '../pages/Dashboard';
+import Tarefas from '../pages/Tarefas/Tarefas';
+import Dashboard from '../pages/Dashboard/Dashboard';
 
 
 const Tab = createBottomTabNavigator();
@@ -14,8 +14,8 @@ const AppRoutes = () => {
       initialRouteName="Dashboard"
       tabBarOptions={
         {
-          activeTintColor: 'tomato',
-          inactiveTintColor: '#ccc'
+          activeTintColor: '#18db83',
+          inactiveTintColor: '#dae3dc'
         }
       }>
       <Tab.Screen
@@ -44,7 +44,6 @@ const AppRoutes = () => {
             )
           }
         } />
-
     </Tab.Navigator>
   )
 }

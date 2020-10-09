@@ -4,10 +4,11 @@ export const Container = styled.View`
     background-color: #dae3dc;
     flex: 1;
     justify-content: center;
-    padding: 0 10px;
+    padding: 30px 10px;
 `;
 
 export const BorderedContainer = styled.View`
+    flex: 1;
     background-color: #fff;
     border: 1px solid #fff;
     border-radius: 5px;
@@ -16,6 +17,7 @@ export const BorderedContainer = styled.View`
 
 export const Img = styled.Image`
     width: 100%;
+    margin-bottom: 50px;
 `;
 
 export const Input = styled.TextInput`
@@ -32,6 +34,12 @@ export const Button = styled.TouchableOpacity`
     height: 50px;
     background-color: #18db83;
     border-radius: 5px;
+    margin: 25px 0;
     align-items: center;
     justify-content: center;
+`;
+
+export const BtnText = styled.Text`
+    font-size: 18px;
+    color: #fff;
 `;

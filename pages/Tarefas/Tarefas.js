@@ -1,155 +1,80 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { Text, View } from 'react-native';
-
+import React from 'react';
+import { StyledHeader, Container, Img, Button, BtnText, Form, BtnForm, Input, TaskContainer, Tasks, TaskDescription, TaskActions } from './Styles';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-
-import {
-  Container,
-  Task,
-  TaskContainer,
-  TaskActions,
-  Input,
-  Button,
-  TextButton,
-  FormEnviar,
-  Tasks,
-  TaskText
-} from './styles'
-
-import api from '../../services/api';
-
-import { UsuarioContext } from '../../contexts/user';
+import LogoImg from '../../assets/logo.png';
 
 const Tarefas = () => {
+    return (
+        <>
+        <StyledHeader>
+                <Img source={LogoImg}/>
+            <Button>
+                <BtnText>
+                    <MaterialCommunityIcons 
+                        name="exit-to-app"
+                        size={28} />
+                </BtnText>
+            </Button>
+        </StyledHeader>
 
-  const usuario = useContext(UsuarioContext);
-  console.warn(usuario);
-
-  const [tasks, setTasks] = useState([]);
-  const [newTask, setNewTask] = useState("");
-
-  const loadTasks = async () => {
-
-    try {
-      const response = await api.get("tarefas");
-      // console.warn(response.data);
-      setTasks(response.data)
-    } catch (err) {
-      console.warn("Falha ao recuperar as tarefas.")
-    }
-
-  }
-
-  const handleAddTasks = async () => {
-
-    if (newTask == "") {
-      // if (newTask.isEmpty()) {
-      // if (!(!!newTask)) {
-      console.warn("você deve preencher a tarefa")
-      return
-    }
-    const params = {
-      descricao: newTask,
-      concluido: false
-    }
-
-    try {
-      await api.post("tarefas", params);
-      setNewTask("");
-      loadTasks();
-    } catch (err) {
-      console.warn("erro ao salvar a tarefa")
-    }
-
-  }
-
-  const handleTasks = async (task) => {
-
-    const params = {
-      ...task,
-      concluido: !task.concluido
-    }
-
-    try {
-      await api.put(`tarefas/${task.id}`, params);
-      loadTasks();
-    } catch (err) {
-
-    }
-  }
-
-  const handleRemoveTask = async ({ id }) => {
-
-    try {
-      await api.delete(`tarefas/${id}`);
-      loadTasks();
-    } catch (err) {
-      console.warn("erro ao deletar tarefa")
-    }
-    // console.warn(`delete ${id}`)
-  }
-
-  //Apenas será executado uma única vez!
-  useEffect(() => {
-    loadTasks();
-  }, [])
-
-  //Aerá executado toda vez que NewTask sofrer alterações
-  //apenas um exemplo, sem relação com a solução atual
-  useEffect(() => {
-    // console.warn(newTask)
-  }, [newTask])
-
-
-
-  return (
-
-    <Container>
-      <FormEnviar>
-        <Input
-          placeholder="Digitar a tarefa ..."
-          onChangeText={(letras) => { setNewTask(letras) }}
-          value={newTask}
-        />
-        <Button onPress={handleAddTasks}>
-          <TextButton>Criar</TextButton>
-        </Button>
-      </FormEnviar>
-
-      <Tasks showsVerticalScrollIndicator={false}>
-
-
-        {tasks.map(task => (
-          <TaskContainer key={task.id} finalizado={task.concluido}>
-            <Task >
-              <TaskText>{task.descricao}</TaskText>
-            </Task>
-            <TaskActions>
-
-              <MaterialCommunityIcons
-                name="delete-outline"
-                color="#333"
-                size={32}
-                onPress={() => { handleRemoveTask(task) }}
-              />
-
-              <MaterialCommunityIcons
-                name={task.concluido ? "check-circle-outline" : "circle-outline"}
-                color={task.concluido ? "#04d361" : "#333"}
-                size={32}
-                onPress={() => { handleTasks(task) }}
-              />
-            </TaskActions>
-          </TaskContainer>
-
-        )
-        )}
-      </Tasks>
-    </Container>
-
-
-  )
-
+        <Container>
+            <Form>
+                <Input placeholder="Digite aqui sua tarefa"/>
+                <BtnForm>
+                    <BtnText>
+                        <MaterialCommunityIcons
+                            name="pencil-plus-outline"
+                            size={32} />
+                    </BtnText>
+                </BtnForm>
+            </Form>
+            <TaskContainer>
+                <Tasks>
+                    <TaskDescription>Criar Tarefas</TaskDescription>
+                    <TaskActions>
+                        <MaterialCommunityIcons 
+                            name="delete-circle-outline" 
+                            size={36} 
+                            color="#dc3545" 
+                        />
+                        <MaterialCommunityIcons 
+                            name="check-circle-outline" 
+                            size={36} 
+                            color="#18db83" />
+                    </TaskActions>
+                </Tasks>
+                <Tasks>
+                    <TaskDescription>Conduzir Tarefas</TaskDescription>
+                    <TaskActions>
+                        <MaterialCommunityIcons 
+                            name="delete-circle-outline" 
+                            size={36} 
+                            color="#dc3545" 
+                        />
+                        <MaterialCommunityIcons 
+                            name="check-circle-outline" 
+                            size={36} 
+                            color="#18db83" />
+                    </TaskActions>
+                </Tasks>
+                <Tasks>
+                    <TaskDescription>Deletar Tarefas</TaskDescription>
+                    <TaskActions>
+                        <MaterialCommunityIcons 
+                            name="delete-circle-outline" 
+                            size={36} 
+                            color="#dc3545" 
+                        />
+                        <MaterialCommunityIcons 
+                            name="check-circle-outline" 
+                            size={36} 
+                            color="#18db83" />
+                    </TaskActions>
+                </Tasks>
+            </TaskContainer>
+        </Container>
+        </>
+    );
 }
 
 export default Tarefas;
