@@ -33,4 +33,5 @@ export const Container = styled.View`
     background-color: #dae3dc;
     flex: 1;
     align-items: center;
+    justify-content: center;
 `;
