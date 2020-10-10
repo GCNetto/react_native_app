@@ -1,7 +1,21 @@
 import React from 'react';
-import { StyledHeader, Container, Img, Button, BtnText, Form, BtnForm, Input, TaskContainer, Tasks, TaskDescription, TaskActions } from './Styles';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import LogoImg from '../../assets/logo.png';
+
+import { 
+    StyledHeader, 
+    Container, 
+    Img, 
+    Button, 
+    BtnText, 
+    Form, 
+    BtnForm, 
+    Input, 
+    TaskContainer, 
+    Tasks, 
+    TaskDescription, 
+    TaskActions 
+} from './Styles';
 
 const Tarefas = () => {
     return (

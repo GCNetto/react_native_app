@@ -4,6 +4,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import Tarefas from '../pages/Tarefas/Tarefas';
 import Dashboard from '../pages/Dashboard/Dashboard';
+import Projetos from '../pages/Projetos/Projetos';
 
 
 const Tab = createBottomTabNavigator();
@@ -39,6 +40,19 @@ const AppRoutes = () => {
             tabBarIcon: ({ color }) => (
               <MaterialCommunityIcons
                 name="view-dashboard"
+                color={color}
+                size={32} />
+            )
+          }
+        } />
+      <Tab.Screen
+        name="Projetos"
+        component={Projetos}
+        options={
+          {
+            tabBarIcon: ({ color }) => (
+              <MaterialCommunityIcons
+                name="check-network"
                 color={color}
                 size={32} />
             )

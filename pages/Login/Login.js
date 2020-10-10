@@ -14,11 +14,11 @@ const Login = () => {
                 <Button>
                     <BtnText>Acessar</BtnText>
                 </Button>
-                <Text style={{textAlign: "center"}}>
+                <Text style={{textAlign: "center", color: "#18db83"}}>
                     <MaterialCommunityIcons
                         name="copyright"
                         size={20}
-                        color="black"
+                        color="#18db83"
                     /> Copyright 2020 - All Rights Reserved
                 </Text>
             </BorderedContainer>
