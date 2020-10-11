@@ -59,30 +59,24 @@ export const BtnForm = styled.TouchableOpacity`
     justify-content: center;
 `;
 
-export const TaskContainer = styled.View`
-    width: 100%;
-    padding: 5px
-    flex: 1;
-`;
-
 export const Tasks = styled.View`
-    width: 100%;
+    width: 97%;
     height: 60px;
     background-color: #fff;
     border: 1px solid #18db83;
     border-radius: 5px;
     align-items: center;
     flex-direction: row;
-    padding: 0 15px;
-    margin: 5px 0;
+    padding: 0 10px;
+    margin: 5px;
 `;
 
 export const TaskDescription = styled.Text`
     font-size: 20px;
-    flex: 1;
+    flex: 6;
 `;
 
 export const TaskActions = styled.Text`
     align-items: center;
-    flex: 1;
+    flex: 2;
 `;

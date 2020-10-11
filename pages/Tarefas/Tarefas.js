@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import LogoImg from '../../assets/logo.png';
+import Api from '../../services/Api';
 
 import { 
     StyledHeader, 
@@ -10,14 +11,30 @@ import {
     BtnText, 
     Form, 
     BtnForm, 
-    Input, 
-    TaskContainer, 
+    Input,  
     Tasks, 
     TaskDescription, 
     TaskActions 
 } from './Styles';
 
 const Tarefas = () => {
+    const [task, setTask] = useState([]);
+    // const [newTask, setNewTask] = useState("");
+
+    const loadTasks = async () => {
+
+        try {
+            const response = await Api.get("tarefas");
+            setTask(response.data)
+        } catch (err) {
+            console.warn("Falha ao recuperar as tarefas.")
+        }
+    }
+
+    useEffect(() => {
+        loadTasks();
+    }, [])
+
     return (
         <>
         <StyledHeader>
@@ -42,9 +59,10 @@ const Tarefas = () => {
                     </BtnText>
                 </BtnForm>
             </Form>
-            <TaskContainer>
-                <Tasks>
-                    <TaskDescription>Criar Tarefas</TaskDescription>
+
+            {task.map(task => (
+                <Tasks key={task.id}>
+                    <TaskDescription>{task.descricao}</TaskDescription>
                     <TaskActions>
                         <MaterialCommunityIcons 
                             name="delete-circle-outline" 
@@ -56,36 +74,8 @@ const Tarefas = () => {
                             size={36} 
                             color="#18db83" />
                     </TaskActions>
-                </Tasks>
-                <Tasks>
-                    <TaskDescription>Conduzir Tarefas</TaskDescription>
-                    <TaskActions>
-                        <MaterialCommunityIcons 
-                            name="delete-circle-outline" 
-                            size={36} 
-                            color="#dc3545" 
-                        />
-                        <MaterialCommunityIcons 
-                            name="check-circle-outline" 
-                            size={36} 
-                            color="#18db83" />
-                    </TaskActions>
-                </Tasks>
-                <Tasks>
-                    <TaskDescription>Deletar Tarefas</TaskDescription>
-                    <TaskActions>
-                        <MaterialCommunityIcons 
-                            name="delete-circle-outline" 
-                            size={36} 
-                            color="#dc3545" 
-                        />
-                        <MaterialCommunityIcons 
-                            name="check-circle-outline" 
-                            size={36} 
-                            color="#18db83" />
-                    </TaskActions>
-                </Tasks>
-            </TaskContainer>
+                </Tasks>)
+            )}
         </Container>
         </>
     );
