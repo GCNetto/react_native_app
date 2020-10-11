@@ -19,7 +19,7 @@ import {
 
 const Tarefas = () => {
     const [task, setTask] = useState([]);
-    // const [newTask, setNewTask] = useState("");
+    const [newTask, setNewTask] = useState("");
 
     const loadTasks = async () => {
 
@@ -28,6 +28,48 @@ const Tarefas = () => {
             setTask(response.data)
         } catch (err) {
             console.warn("Falha ao recuperar as tarefas.")
+        }
+    }
+
+    const handlePostTasks = async () => {
+        if (newTask == "") {
+            console.warn("você deve preencher a tarefa")
+        }
+
+        const params = {
+            descricao: newTask,
+            concluido: false
+        }
+
+        try {
+            await Api.post("tarefas", params);
+            setNewTask("");
+            loadTasks();
+        } catch (err) {
+            console.warn("Erro ao salvar a tarefa")
+        }
+    }
+
+    const handleDeleteTasks = async ({ id }) => {
+        try {
+            await Api.delete(`tarefas/${id}`);
+            loadTasks();
+        } catch (err) {
+            console.warn("Erro ao deletar tarefa")
+        }
+    }
+
+    const handlePutTasks = async (task) => {
+        const params = {
+            ...task,
+            concluido: !task.concluido
+        }
+    
+        try {
+            await Api.put(`tarefas/${task.id}`, params);
+            loadTasks();
+        } catch (err) {
+            console.warn("Erro ao atualizar tarefas")
         }
     }
 
@@ -50,8 +92,12 @@ const Tarefas = () => {
 
         <Container>
             <Form>
-                <Input placeholder="Digite aqui sua tarefa"/>
-                <BtnForm>
+                <Input placeholder="Digite aqui sua tarefa" onChangeText={(letras) => 
+                    {
+                        setNewTask(letras)
+                    }
+                } value={newTask}/>
+                <BtnForm onPress={ handlePostTasks }>
                     <BtnText>
                         <MaterialCommunityIcons
                             name="pencil-plus-outline"
@@ -68,11 +114,22 @@ const Tarefas = () => {
                             name="delete-circle-outline" 
                             size={36} 
                             color="#dc3545" 
+                            onPress={() => 
+                                {
+                                    handleDeleteTasks(task)
+                                }
+                            }
                         />
                         <MaterialCommunityIcons 
-                            name="check-circle-outline" 
+                            name={task.concluido ? "check-circle-outline" : "circle-outline"} 
                             size={36} 
-                            color="#18db83" />
+                            color={task.concluido ? "#18db83" : "#dae3dc"}
+                            onPress={() => 
+                                {
+                                    handlePutTasks(task)
+                                }
+                            }
+                        />
                     </TaskActions>
                 </Tasks>)
             )}
