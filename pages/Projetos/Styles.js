@@ -59,50 +59,30 @@ export const BtnForm = styled.TouchableOpacity`
     justify-content: center;
 `;
 
-export const ProjectContainer = styled.View`
-    width: 100%;
-    padding: 5px
-    flex: 1;
-`;
-
 export const Projects = styled.View`
-    width: 100%;
+    max-width: 100%;
     height: 60px;
     background-color: #fff;
     border: 1px solid #18db83;
     border-radius: 5px;
     align-items: center;
     flex-direction: row;
-    padding: 0 15px;
-    margin: 5px 0 0 0;
+    padding: 0 10px;
+`;
+
+export const ProjectContainer = styled.View`
+    width: 98%;
+    border-radius: 5px;
+    background-color: #fff;
+    align-items: center;
 `;
 
 export const ProjectDescription = styled.Text`
     font-size: 20px;
-    flex: 7;
+    flex: 6;
 `;
 
 export const ProjectActions = styled.Text`
-    flex: 1;
     align-items: center;
-`;
-
-export const DescriptionContainer = styled.View`
-    border: 1px solid #fff;
-    border-radius: 5px;
-    background-color: #fff;
-    flex-direction: column;
-    padding: 2px;
-`;
-
-export const Descriptions = styled.View`
-    width: 100%;
-    height: 45px;
-    background-color: #fff;
-    border: 1px solid #18db83;
-    border-radius: 5px;
-    align-items: center;
-    flex-direction: row;
-    padding: 0 15px;
-    margin: 3px 0;
+    flex: 2;
 `;

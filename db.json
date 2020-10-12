@@ -14,24 +14,9 @@
   ],
   "tarefas": [
     {
-      "descricao": "Criar Tarefas",
-      "projetoId": 1,
-      "usuarioId": 1,
+      "descricao": "Tarefa Final",
+      "idProjeto": 1,
       "id": 1,
-      "concluido": true
-    },
-    {
-      "descricao": "Conduzir Tarefas",
-      "projetoId": 1,
-      "usuarioId": 1,
-      "id": 2,
-      "concluido": true
-    },
-    {
-      "descricao": "Deletar Tarefas",
-      "projetoId": 1,
-      "usuarioId": 1,
-      "id": 3,
       "concluido": true
     }
   ]

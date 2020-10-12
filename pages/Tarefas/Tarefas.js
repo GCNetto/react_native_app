@@ -18,11 +18,12 @@ import {
 } from './Styles';
 
 const Tarefas = () => {
-    const [task, setTask] = useState([]);
-    const [newTask, setNewTask] = useState("");
+    const [ task, setTask ] = useState([]);
+    const [ newTask, setNewTask ] = useState("");
+    const [ project, setProject ] = useState([]);
+    const [ descricaoProjeto, setDescricaoProjeto ] = useState("");
 
     const loadTasks = async () => {
-
         try {
             const response = await Api.get("tarefas");
             setTask(response.data)
@@ -33,18 +34,25 @@ const Tarefas = () => {
 
     const handlePostTasks = async () => {
         if (newTask == "") {
-            console.warn("você deve preencher a tarefa")
+            console.warn("Você deve preencher a tarefa")
         }
 
+        const response = await Api.get("projetos");
+        setProject(response.data.find(({ descricao }) => {
+           return descricao == descricaoProjeto;
+        }))
+        
         const params = {
             descricao: newTask,
-            concluido: false
+            concluido: false,
+            idProjeto: project.id
         }
 
         try {
             await Api.post("tarefas", params);
             setNewTask("");
             loadTasks();
+            setDescricaoProjeto("");
         } catch (err) {
             console.warn("Erro ao salvar a tarefa")
         }
@@ -55,7 +63,7 @@ const Tarefas = () => {
             await Api.delete(`tarefas/${id}`);
             loadTasks();
         } catch (err) {
-            console.warn("Erro ao deletar tarefa")
+
         }
     }
 
@@ -97,6 +105,13 @@ const Tarefas = () => {
                         setNewTask(letras)
                     }
                 } value={newTask}/>
+            </Form>
+            <Form>
+                <Input placeholder="Projeto pertencente" onChangeText={(letras) => 
+                    {
+                        setDescricaoProjeto(letras)
+                    }
+                } value={descricaoProjeto}/>
                 <BtnForm onPress={ handlePostTasks }>
                     <BtnText>
                         <MaterialCommunityIcons

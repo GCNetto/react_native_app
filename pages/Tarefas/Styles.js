@@ -32,7 +32,6 @@ export const BtnText = styled.Text`
 export const Container = styled.View`
     background-color: #dae3dc;
     flex: 1;
-    align-items: center;
 `;
 
 export const Form = styled.View`
@@ -40,21 +39,21 @@ export const Form = styled.View`
 `;
 
 export const Input = styled.TextInput`
+    flex: 5;
     background-color: #fff;
-    border:1px solid #18db83;
-    height:60px;
-    flex:1;
-    border-radius:5px;
-    padding:0 20px;
+    border: 1px solid #18db83;
+    height: 60px;
+    border-radius: 5px;
+    padding: 0 20px;
     margin: 5px;
 `;
 
 export const BtnForm = styled.TouchableOpacity`
-    width: 25%;
+    flex: 2;
     height: 60px;
     background-color: #18db83;
     border-radius: 5px;
-    margin: 5px
+    margin: 5px 5px auto auto;
     align-items: center;
     justify-content: center;
 `;
