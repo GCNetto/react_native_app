@@ -3,32 +3,31 @@ import { Text } from 'react-native';
 import { StyledHeader, Container, Img, Button, BtnText } from './Styles';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import LogoImg from '../../assets/logo.png';
+import firebase from 'firebase';
+import 'firebase/firestore'
 import ProgressCircle from 'react-native-progress-circle';
-import Api from '../../services/Api';
-import { useIsFocused } from '@react-navigation/native';
+// import { useIsFocused } from '@react-navigation/native';
 
 const Dashboard = () => {
-    const focus = useIsFocused();
+    // const focus = useIsFocused();
     const [percent, setPercent] = useState(0);
 
-    const calcularPercent = async () => {
+    const listenDashboard = (tasks) => {
         try {
-            const response = await Api.get("tarefas");
-            const tasks = response.data;
-            const tasksOk = tasks.filter((task) => {
-                return task.concluido;
+            const tarefas = tasks.docs;
+            const tarefasOk = tarefas.filter((task) => {
+                return task.data().concluido;
             });
-            setPercent((tasksOk.length / tasks.length) * 100);
+            setPercent((tarefasOk.length / tarefas.length) * 100);
         } catch (err) {
             console.warn("Erro ao recuperar tarefas");
         }
     }
 
     useEffect(() => {
-        if (focus) {
-            calcularPercent();
-        }
-    }, [focus]);
+        const listener = firebase.firestore().collection('tarefas').onSnapshot(listenDashboard);
+        return () => listener();
+    }, []);
 
     return (
         <>

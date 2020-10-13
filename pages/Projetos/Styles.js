@@ -86,3 +86,25 @@ export const ProjectActions = styled.Text`
     align-items: center;
     flex: 2;
 `;
+
+export const Tasks = styled.View`
+    width: 97%;
+    height: 60px;
+    background-color: #fff;
+    border: 1px solid #18db83;
+    border-radius: 5px;
+    align-items: center;
+    flex-direction: row;
+    padding: 0 10px;
+    margin: 5px;
+`;
+
+export const TaskDescription = styled.Text`
+    font-size: 20px;
+    flex: 7;
+`;
+
+export const TaskActions = styled.Text`
+    align-items: center;
+    flex: 2;
+`;

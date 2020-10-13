@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import LogoImg from '../../assets/logo.png';
-import Api from '../../services/Api';
+import firebase from 'firebase';
+import 'firebase/firestore';
 
 import { 
     StyledHeader, 
@@ -23,68 +24,100 @@ const Tarefas = () => {
     const [ project, setProject ] = useState([]);
     const [ descricaoProjeto, setDescricaoProjeto ] = useState("");
 
-    const loadTasks = async () => {
-        try {
-            const response = await Api.get("tarefas");
-            setTask(response.data)
-        } catch (err) {
-            console.warn("Falha ao recuperar as tarefas.")
-        }
+    const listenTasks = (tasks) => {
+        const data = tasks.docs.map((task) => {
+            return {
+                id: task.id,
+                ...task.data()
+            }
+        })
+        setTask(data);
     }
 
+    const listenProjects = (projects) => {
+        const data = projects.docs.map((project) => {
+            return {
+                id: project.id,
+                ...project.data()
+            }
+        })
+        setProject(data);
+    }
+    
+    
     const handlePostTasks = async () => {
         if (newTask == "") {
-            console.warn("Você deve preencher a tarefa")
+            console.warn("Você deve preencher a tarefa");
         }
 
-        const response = await Api.get("projetos");
-        setProject(response.data.find(({ descricao }) => {
-           return descricao == descricaoProjeto;
-        }))
+        // const projetos = await firebase.firestore().collection('projetos').get().then(
+        //     querySnapshot => {
+        //         const docs = querySnapshot.docs;
+        //         const data = [];
+        //         docs.forEach((doc) => {
+        //             console.warn(doc);
+        //             data.push(doc.data());
+        //         })
+        //         return data;
+        //     }
+        // );
+
+        // setProject(projetos.find(({descricao}) => {
+        //     return descricao == descricaoProjeto;
+        // }))
+
+    // // // => 
+
+        // const response = await Api.get("projetos");
+        // setProject(response.data.find(({ descricao }) => {
+        //    return descricao == descricaoProjeto;
+        // }))
         
         const params = {
             descricao: newTask,
             concluido: false,
-            idProjeto: project.id
+            // idProjeto: project.id
         }
-
+        
         try {
-            await Api.post("tarefas", params);
+            await firebase.firestore().collection('tarefas').add(params);
             setNewTask("");
-            loadTasks();
-            setDescricaoProjeto("");
         } catch (err) {
-            console.warn("Erro ao salvar a tarefa")
-        }
+            console.warn("Erro ao salvar a tarefa");
+        }      
     }
-
+    
     const handleDeleteTasks = async ({ id }) => {
         try {
-            await Api.delete(`tarefas/${id}`);
-            loadTasks();
+            await firebase.firestore().collection('tarefas').doc(id).delete();
         } catch (err) {
-
+            console.warn("erro ao deletar tarefa");
         }
     }
-
-    const handlePutTasks = async (task) => {
+    
+    const handlePutTasks = async ({ id, concluido }) => {
         const params = {
             ...task,
-            concluido: !task.concluido
+            concluido: !concluido
         }
-    
+        
         try {
-            await Api.put(`tarefas/${task.id}`, params);
-            loadTasks();
+            await firebase.firestore().collection('tarefas').doc(id).set(params, { merge: true });
         } catch (err) {
-            console.warn("Erro ao atualizar tarefas")
+            console.warn("Erro ao atualizar tarefas");
         }
     }
 
     useEffect(() => {
-        loadTasks();
+        const listener = firebase.firestore().collection('tarefas').onSnapshot(listenTasks);
+        return () => listener();
     }, [])
 
+    useEffect(() => {
+        const projectListener = firebase.firestore().collection('projetos').onSnapshot(listenProjects);
+        return () => projectListener();
+    }, [])
+    
     return (
         <>
         <StyledHeader>

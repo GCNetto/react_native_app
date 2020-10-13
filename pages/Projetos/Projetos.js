@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Text } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import LogoImg from '../../assets/logo.png';
-import Api from '../../services/Api';
+import firebase from 'firebase';
+import 'firebase/firestore';
 
 import { 
     StyledHeader, 
@@ -16,22 +16,38 @@ import {
     Projects,
     ProjectContainer,
     ProjectDescription,
-    ProjectActions
+    ProjectActions,
+    Tasks,
+    TaskDescription,
+    TaskActions
 } from './Styles';
 
 const Projetos= () => {
     const [ project, setProject ] = useState([]);
     const [ newProject, setNewProject ] = useState("");
+    const [ task, setTask ] = useState([]);
 
-    const loadProjects = async () => {
-        try {
-            const response = await Api.get("projetos");
-            setProject(response.data)
-        } catch (err) {
-            console.warn("Falha ao recuperar projetos")
-        }
+    const listenProjects = (projetos) => {
+        const data = projetos.docs.map((projeto) => {
+            return {
+                id: projeto.id,
+                ...projeto.data()
+            }
+        })
+        setProject(data);
     }
 
+    const listenTasks = (tarefas) => {
+        const data = tarefas.docs.map((tarefa) => {
+            return {
+                id: tarefa.id,
+                ...tarefa.data()
+            }
+        })
+        setTask(data);
+    }
+    
+    
     const handlePostProjects = async () => {
         if(newProject == "") {
             console.warn("Você deve preencher o projeto");
@@ -42,25 +58,44 @@ const Projetos= () => {
         }
 
         try {
-            await Api.post("projetos", params)
-            setNewProject("")
-            loadProjects();
+            await firebase.firestore().collection('projetos').add(params);
+            setNewProject("");
         } catch (err) {
-            console.warn("Erro ao salvar projeto")
+            console.warn("Erro ao salvar projeto");
         }
     }
 
     const handleDeleteProjects = async ({ id }) => {
         try {
-            await Api.delete(`projetos/${id}`);
-            loadProjects();
-        } catch (err) {
-            
-        }
+            await firebase.firestore().collection('projetos').doc(id).delete();
+        } catch (err) { }
     }
 
+    const handlePutTasks = async ({ id, concluido }) => {
+        const params = {
+            ...task,
+            concluido: !concluido
+        }
+
+        try {
+            await firebase.firestore().collection('tarefas').doc(id).set(params, { merge: true });
+        } catch (err) {
+            console.warn("Erro ao atualizar tarefa");
+        }
+    }
+    
     useEffect(() => {
-        loadProjects();
+        const listener = firebase.firestore().collection('projetos').onSnapshot(listenProjects);
+        return () => {
+            listener();
+        }
+    }, [])
+    
+    useEffect(() => {
+        const taskListener = firebase.firestore().collection('tarefas').onSnapshot(listenTasks);
+        return () => {
+            taskListener();
+        }
     }, [])
 
     return (
@@ -108,7 +143,23 @@ const Projetos= () => {
                         </ProjectActions>
                     </Projects>)
                 )}
-                <Text>Container</Text>
+                {task.map(task => (
+                    <Tasks key={task.id}>
+                        <TaskDescription>{task.descricao}</TaskDescription>
+                        <TaskActions>
+                            <MaterialCommunityIcons
+                                name={task.concluido ? "check-circle-outline" : "circle-outline"}
+                                size={36}
+                                color={task.concluido ? "#18db83" : "#dae3dc"}
+                                onPress={() => 
+                                    {
+                                        handlePutTasks(task);
+                                    }
+                                }
+                            />
+                        </TaskActions>
+                    </Tasks>)
+                )}
             </ProjectContainer>
         </Container>
         </>
