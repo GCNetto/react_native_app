@@ -65,8 +65,7 @@ const Projetos= () => {
         }
 
         const params = {
-            descricao: newProject,
-            // id: id++​​
+            descricao: newProject
         }
 
         try {

@@ -45,4 +45,3 @@ const UsuarioProvider = ({ children }) => {
 }
 
 export { UsuarioContext, UsuarioProvider }
-

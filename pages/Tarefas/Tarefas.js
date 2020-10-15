@@ -3,6 +3,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import LogoImg from '../../assets/logo.png';
 import firebase from 'firebase';
 import 'firebase/firestore';
+import 'firebase/auth';
 import { UsuarioContext } from '../../contexts/user';
 
 import { 
@@ -20,12 +21,13 @@ import {
 } from './Styles';
 
 const Tarefas = () => {
+    const { user, signOut } = useContext(UsuarioContext);
+
     const [ task, setTask ] = useState([]);
     const [ newTask, setNewTask ] = useState("");
     const [ project, setProject ] = useState([]);
     const [ descricaoProjeto, setDescricaoProjeto ] = useState("");
 
-    const { signOut } = useContext(UsuarioContext);
 
     const listenTasks = (tasks) => {
         const data = tasks.docs.map((task) => {
@@ -60,20 +62,20 @@ const Tarefas = () => {
             console.warn("Você deve preencher a tarefa");
         }
 
-        const idProjects = await firebase.firestore().collection('projetos').where('id', '==', 1)
-        .get().then((snapshot) => {
-            let auxId = 0;
+        const descProject = await firebase.firestore().collection('projetos')
+        .where('descricao', '==', descricaoProjeto).get()
+        .then((snapshot) => {
             snapshot.forEach((doc) => {
-                auxId = doc.data().id;
-                console.log(doc.id, doc.data());
+                setDescricaoProjeto(doc.data().descricao);
             })
-            return auxId;
-        });
+            return descricaoProjeto;
+        })
 
         const params = {
             descricao: newTask,
             concluido: false,
-            idProjeto: idProjects
+            projeto: descProject,
+            usuario: user.email
         }
         
         try {
@@ -153,6 +155,10 @@ const Tarefas = () => {
                 </BtnForm>
             </Form>
 
+            {/* { user.email == task.map((task) => {
+                return task.email; 
+            }) ? 
+            <Container> */}
             {task.map(task => (
                 <Tasks key={task.id}>
                     <TaskDescription>{task.descricao}</TaskDescription>
@@ -180,6 +186,11 @@ const Tarefas = () => {
                     </TaskActions>
                 </Tasks>)
             )}
+            {/* </Container> :
+            <Container>
+
+            </Container>
+            } */}
         </Container>
         </>
     );
