@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import LogoImg from '../../assets/logo.png';
 import firebase from 'firebase';
 import 'firebase/firestore';
+import { UsuarioContext } from '../../contexts/user';
 
 import { 
     StyledHeader, 
@@ -24,6 +25,8 @@ const Tarefas = () => {
     const [ project, setProject ] = useState([]);
     const [ descricaoProjeto, setDescricaoProjeto ] = useState("");
 
+    const { signOut } = useContext(UsuarioContext);
+
     const listenTasks = (tasks) => {
         const data = tasks.docs.map((task) => {
             return {
@@ -44,39 +47,33 @@ const Tarefas = () => {
         setProject(data);
     }
     
+    const handleSaida = async () => {
+        try {
+            await signOut();
+        } catch (err) {
+            console.warn(err);       
+        }
+    }
     
     const handlePostTasks = async () => {
         if (newTask == "") {
             console.warn("Você deve preencher a tarefa");
         }
 
-        // const projetos = await firebase.firestore().collection('projetos').get().then(
-        //     querySnapshot => {
-        //         const docs = querySnapshot.docs;
-        //         const data = [];
-        //         docs.forEach((doc) => {
-        //             console.warn(doc);
-        //             data.push(doc.data());
-        //         })
-        //         return data;
-        //     }
-        // );
+        const idProjects = await firebase.firestore().collection('projetos').where('id', '==', 1)
+        .get().then((snapshot) => {
+            let auxId = 0;
+            snapshot.forEach((doc) => {
+                auxId = doc.data().id;
+                console.log(doc.id, doc.data());
+            })
+            return auxId;
+        });
 
-        // setProject(projetos.find(({descricao}) => {
-        //     return descricao == descricaoProjeto;
-        // }))
-
-    // // // => 
-
-        // const response = await Api.get("projetos");
-        // setProject(response.data.find(({ descricao }) => {
-        //    return descricao == descricaoProjeto;
-        // }))
-        
         const params = {
             descricao: newTask,
             concluido: false,
-            // idProjeto: project.id
+            idProjeto: idProjects
         }
         
         try {
@@ -91,7 +88,7 @@ const Tarefas = () => {
         try {
             await firebase.firestore().collection('tarefas').doc(id).delete();
         } catch (err) {
-            console.warn("erro ao deletar tarefa");
+            console.warn("Erro ao apagar tarefa");
         }
     }
     
@@ -116,7 +113,7 @@ const Tarefas = () => {
     useEffect(() => {
         const projectListener = firebase.firestore().collection('projetos').onSnapshot(listenProjects);
         return () => projectListener();
-    }, [])
+    }, [project])
     
     return (
         <>
@@ -126,7 +123,9 @@ const Tarefas = () => {
                 <BtnText>
                     <MaterialCommunityIcons 
                         name="exit-to-app"
-                        size={28} />
+                        size={28} 
+                        onPress={() => { handleSaida(); }}
+                    />
                 </BtnText>
             </Button>
         </StyledHeader>

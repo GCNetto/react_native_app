@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Text } from 'react-native';
 import { StyledHeader, Container, Img, Button, BtnText } from './Styles';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -6,10 +6,12 @@ import LogoImg from '../../assets/logo.png';
 import firebase from 'firebase';
 import 'firebase/firestore'
 import ProgressCircle from 'react-native-progress-circle';
+import { UsuarioContext } from '../../contexts/user';
 // import { useIsFocused } from '@react-navigation/native';
 
 const Dashboard = () => {
     // const focus = useIsFocused();
+    const { signOut } = useContext(UsuarioContext);
     const [percent, setPercent] = useState(0);
 
     const listenDashboard = (tasks) => {
@@ -21,6 +23,14 @@ const Dashboard = () => {
             setPercent((tarefasOk.length / tarefas.length) * 100);
         } catch (err) {
             console.warn("Erro ao recuperar tarefas");
+        }
+    }
+
+    const handleSaida = async () => {
+        try {
+            await signOut();
+        } catch (err) {
+            console.warn(err);       
         }
     }
 
@@ -38,6 +48,7 @@ const Dashboard = () => {
                     <MaterialCommunityIcons 
                         name="exit-to-app"
                         size={28}
+                        onPress={() => { handleSaida(); }}
                     />
                 </BtnText>
             </Button>

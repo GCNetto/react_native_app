@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import LogoImg from '../../assets/logo.png';
 import firebase from 'firebase';
 import 'firebase/firestore';
+import { UsuarioContext } from '../../contexts/user';
 
 import { 
     StyledHeader, 
@@ -17,12 +18,15 @@ import {
     ProjectContainer,
     ProjectDescription,
     ProjectActions,
+    TaskContainer,
     Tasks,
     TaskDescription,
     TaskActions
 } from './Styles';
 
 const Projetos= () => {
+    const { signOut } = useContext(UsuarioContext);
+
     const [ project, setProject ] = useState([]);
     const [ newProject, setNewProject ] = useState("");
     const [ task, setTask ] = useState([]);
@@ -46,7 +50,14 @@ const Projetos= () => {
         })
         setTask(data);
     }
-    
+
+    const handleSaida = async () => {
+        try {
+            await signOut();
+        } catch (err) {
+            console.warn(err);       
+        }
+    }
     
     const handlePostProjects = async () => {
         if(newProject == "") {
@@ -54,7 +65,8 @@ const Projetos= () => {
         }
 
         const params = {
-            descricao: newProject
+            descricao: newProject,
+            // id: id++​​
         }
 
         try {
@@ -106,7 +118,9 @@ const Projetos= () => {
                 <BtnText>
                     <MaterialCommunityIcons 
                         name="exit-to-app"
-                        size={28} />
+                        size={28}
+                        onPress={() => { handleSaida(); }}
+                    />
                 </BtnText>
             </Button>
         </StyledHeader>
@@ -129,21 +143,21 @@ const Projetos= () => {
 
             <ProjectContainer>
                 {project.map(project => (
-                    <Projects key={project.id}>
-                        <ProjectDescription>{project.descricao}</ProjectDescription>
-                        <ProjectActions>
-                            <MaterialCommunityIcons 
-                                name="delete-circle-outline" 
-                                size={36} 
-                                color="#dc3545"
-                                onPress={() => {
-                                    handleDeleteProjects(project);
-                                }}
-                            />
-                        </ProjectActions>
-                    </Projects>)
-                )}
-                {task.map(task => (
+                <Projects key={project.id}>
+                    <ProjectDescription>{project.descricao}</ProjectDescription>
+                    <ProjectActions>
+                        <MaterialCommunityIcons 
+                            name="delete-circle-outline" 
+                            size={36} 
+                            color="#dc3545"
+                            onPress={() => {
+                                handleDeleteProjects(project);
+                            }}
+                        />
+                    </ProjectActions>
+                </Projects>))}
+                <TaskContainer>
+                    {task.map(task => (
                     <Tasks key={task.id}>
                         <TaskDescription>{task.descricao}</TaskDescription>
                         <TaskActions>
@@ -151,15 +165,13 @@ const Projetos= () => {
                                 name={task.concluido ? "check-circle-outline" : "circle-outline"}
                                 size={36}
                                 color={task.concluido ? "#18db83" : "#dae3dc"}
-                                onPress={() => 
-                                    {
-                                        handlePutTasks(task);
-                                    }
-                                }
+                                onPress={() => {
+                                    handlePutTasks(task);
+                                }}
                             />
                         </TaskActions>
-                    </Tasks>)
-                )}
+                    </Tasks>))}
+                </TaskContainer>
             </ProjectContainer>
         </Container>
         </>

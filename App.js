@@ -1,8 +1,8 @@
 import 'react-native-gesture-handler';
 import React from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
-// import Login from './pages/Login/Login';
 import Routes from './routes';
+import { UsuarioProvider } from './contexts/user';
 import './services/firebase';
 import { LogBox } from 'react-native';
 
@@ -11,8 +11,9 @@ export default function App() {
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
-            <Routes />
-            {/* <Login /> */}
+            <UsuarioProvider>
+                <Routes />
+            </UsuarioProvider>
         </SafeAreaView>
     );
 }

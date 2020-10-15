@@ -29,7 +29,8 @@ export const BtnText = styled.Text`
     color: #fff;
 `;
 
-export const Container = styled.View`
+export const Container = styled.ScrollView`
+    padding: 2px;
     background-color: #dae3dc;
     flex: 1;
 `;
@@ -66,7 +67,7 @@ export const Tasks = styled.View`
     border-radius: 5px;
     align-items: center;
     flex-direction: row;
-    padding: 0 10px;
+    padding: 0 8px;
     margin: 5px;
 `;
 

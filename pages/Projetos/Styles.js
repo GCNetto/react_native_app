@@ -29,10 +29,10 @@ export const Img = styled.Image`
     border-radius: 5px;
 `;
 
-export const Container = styled.View`
+export const Container = styled.ScrollView`
+    padding: 2px;
     background-color: #dae3dc;
     flex: 1;
-    align-items: center;
 `;
 
 export const Form = styled.View`
@@ -59,6 +59,12 @@ export const BtnForm = styled.TouchableOpacity`
     justify-content: center;
 `;
 
+export const ProjectContainer = styled.View`
+    padding: 5px;
+    align-items: center;
+    flex-direction: column;    
+`;
+
 export const Projects = styled.View`
     max-width: 100%;
     height: 60px;
@@ -68,13 +74,6 @@ export const Projects = styled.View`
     align-items: center;
     flex-direction: row;
     padding: 0 10px;
-`;
-
-export const ProjectContainer = styled.View`
-    width: 98%;
-    border-radius: 5px;
-    background-color: #fff;
-    align-items: center;
 `;
 
 export const ProjectDescription = styled.Text`
@@ -87,13 +86,19 @@ export const ProjectActions = styled.Text`
     flex: 2;
 `;
 
+export const TaskContainer = styled.View`
+    flex-direction: column;
+`;
+
 export const Tasks = styled.View`
     width: 97%;
     height: 60px;
     background-color: #fff;
     border: 1px solid #18db83;
     border-radius: 5px;
+    justify-content: center;
     align-items: center;
+    display: flex;
     flex-direction: row;
     padding: 0 10px;
     margin: 5px;
@@ -106,5 +111,5 @@ export const TaskDescription = styled.Text`
 
 export const TaskActions = styled.Text`
     align-items: center;
-    flex: 2;
+    flex: 1;
 `;
