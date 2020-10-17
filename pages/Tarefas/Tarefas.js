@@ -27,8 +27,7 @@ const Tarefas = () => {
     const [ newTask, setNewTask ] = useState("");
     const [ project, setProject ] = useState([]);
     const [ descricaoProjeto, setDescricaoProjeto ] = useState("");
-
-
+    
     const listenTasks = (tasks) => {
         const data = tasks.docs.map((task) => {
             return {
@@ -74,13 +73,14 @@ const Tarefas = () => {
         const params = {
             descricao: newTask,
             concluido: false,
-            projeto: descProject,
+            projeto: project.find((project) => { return project.descricao = descProject; }),
             usuario: user.email
         }
         
         try {
             await firebase.firestore().collection('tarefas').add(params);
             setNewTask("");
+            setDescricaoProjeto("");
         } catch (err) {
             console.warn("Erro ao salvar a tarefa");
         }      
@@ -115,7 +115,7 @@ const Tarefas = () => {
     useEffect(() => {
         const projectListener = firebase.firestore().collection('projetos').onSnapshot(listenProjects);
         return () => projectListener();
-    }, [project])
+    }, [])
     
     return (
         <>
@@ -127,7 +127,7 @@ const Tarefas = () => {
                         name="exit-to-app"
                         size={28} 
                         onPress={() => { handleSaida(); }}
-                    />
+                        />
                 </BtnText>
             </Button>
         </StyledHeader>
@@ -154,43 +154,32 @@ const Tarefas = () => {
                     </BtnText>
                 </BtnForm>
             </Form>
-
-            {/* { user.email == task.map((task) => {
-                return task.email; 
-            }) ? 
-            <Container> */}
             {task.map(task => (
-                <Tasks key={task.id}>
-                    <TaskDescription>{task.descricao}</TaskDescription>
-                    <TaskActions>
-                        <MaterialCommunityIcons 
-                            name="delete-circle-outline" 
-                            size={40} 
-                            color="#dc3545" 
-                            onPress={() => 
-                                {
-                                    handleDeleteTasks(task)
-                                }
+            <Tasks key={task.id}>
+                <TaskDescription>{task.descricao}</TaskDescription>
+                <TaskActions>
+                    <MaterialCommunityIcons 
+                        name="delete-circle-outline" 
+                        size={40} 
+                        color="#dc3545" 
+                        onPress={() => 
+                            {
+                                handleDeleteTasks(task)
                             }
-                        />
-                        <MaterialCommunityIcons 
-                            name={task.concluido ? "check-circle-outline" : "circle-outline"} 
-                            size={40} 
-                            color={task.concluido ? "#18db83" : "#dae3dc"}
-                            onPress={() => 
-                                {
-                                    handlePutTasks(task)
-                                }
+                        }
+                    />
+                    <MaterialCommunityIcons 
+                        name={task.concluido ? "check-circle-outline" : "circle-outline"} 
+                        size={40} 
+                        color={task.concluido ? "#18db83" : "#dae3dc"}
+                        onPress={() => 
+                            {
+                                handlePutTasks(task)
                             }
-                        />
-                    </TaskActions>
-                </Tasks>)
-            )}
-            {/* </Container> :
-            <Container>
-
-            </Container>
-            } */}
+                        }
+                    />
+                </TaskActions>
+            </Tasks>))}
         </Container>
         </>
     );
