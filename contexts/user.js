@@ -28,6 +28,18 @@ const UsuarioProvider = ({ children }) => {
         })
     }
 
+    const signUp = async (email, password) => {
+        firebase
+        .auth()
+        .createUserWithEmailAndPassword(email, password)
+        .then(() => {
+            console.warn("Cadastro bem sucedido.");
+        })
+        .catch(() => {
+            console.warn("Parece que tivemos um problema.");
+        })
+    }
+
     const signOut = async () => {
         firebase.auth().signOut()
         .then(() => {
@@ -38,7 +50,7 @@ const UsuarioProvider = ({ children }) => {
     }
 
     return (
-        <UsuarioContext.Provider value={{ user, signIn, signOut }}>
+        <UsuarioContext.Provider value={{ user, signIn, signUp, signOut }}>
             {children}
         </UsuarioContext.Provider>
     )

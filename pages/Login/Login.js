@@ -6,7 +6,7 @@ import LogoImg from '../../assets/logo.png';
 import { UsuarioContext } from '../../contexts/user';
 
 const Login = () => {
-    const { signIn } = useContext(UsuarioContext);
+    const { signIn, signUp } = useContext(UsuarioContext);
 
     const [ email, setEmail ] = useState("");
     const [ password, setPassword ] = useState("");
@@ -14,6 +14,14 @@ const Login = () => {
     const handleAcesso = async () => {
         try {
             await signIn(email, password);
+        } catch (err) {
+            console.warn(err);
+        }
+    }
+
+    const handleCadastro = async () => {
+        try {
+            await signUp(email, password);
         } catch (err) {
             console.warn(err);
         }
@@ -34,6 +42,9 @@ const Login = () => {
                 />
                 <Button onPress={() => { handleAcesso(); }}>
                     <BtnText>Acessar</BtnText>
+                </Button>
+                <Button onPress={() => { handleCadastro(); }}>
+                    <BtnText>Cadastre-se</BtnText>
                 </Button>
                 <Text style={{textAlign: "center", color: "#18db83"}}>
                     <MaterialCommunityIcons

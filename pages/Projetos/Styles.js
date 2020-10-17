@@ -61,7 +61,6 @@ export const BtnForm = styled.TouchableOpacity`
 
 export const ProjectContainer = styled.View`
     padding: 5px;
-    align-items: center;
     flex-direction: column;    
 `;
 
@@ -83,7 +82,7 @@ export const ProjectDescription = styled.Text`
 
 export const ProjectActions = styled.Text`
     align-items: center;
-    flex: 2;
+    flex: 1;
 `;
 
 export const TaskContainer = styled.View`
@@ -106,7 +105,7 @@ export const Tasks = styled.View`
 
 export const TaskDescription = styled.Text`
     font-size: 20px;
-    flex: 7;
+    flex: 6;
 `;
 
 export const TaskActions = styled.Text`

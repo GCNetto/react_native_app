@@ -17,7 +17,7 @@ export const BorderedContainer = styled.View`
 
 export const Img = styled.Image`
     width: 100%;
-    margin-bottom: 50px;
+    margin-bottom: 20px;
 `;
 
 export const Input = styled.TextInput`
@@ -34,7 +34,7 @@ export const Button = styled.TouchableOpacity`
     height: 50px;
     background-color: #18db83;
     border-radius: 5px;
-    margin: 25px 0;
+    margin: 10px 0;
     align-items: center;
     justify-content: center;
 `;

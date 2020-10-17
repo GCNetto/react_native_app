@@ -165,7 +165,7 @@ const Tarefas = () => {
                     <TaskActions>
                         <MaterialCommunityIcons 
                             name="delete-circle-outline" 
-                            size={36} 
+                            size={40} 
                             color="#dc3545" 
                             onPress={() => 
                                 {
@@ -175,7 +175,7 @@ const Tarefas = () => {
                         />
                         <MaterialCommunityIcons 
                             name={task.concluido ? "check-circle-outline" : "circle-outline"} 
-                            size={36} 
+                            size={40} 
                             color={task.concluido ? "#18db83" : "#dae3dc"}
                             onPress={() => 
                                 {

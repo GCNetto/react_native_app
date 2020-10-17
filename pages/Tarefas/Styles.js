@@ -73,7 +73,7 @@ export const Tasks = styled.View`
 
 export const TaskDescription = styled.Text`
     font-size: 20px;
-    flex: 6;
+    flex: 5;
 `;
 
 export const TaskActions = styled.Text`

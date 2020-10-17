@@ -142,35 +142,38 @@ const Projetos= () => {
 
             <ProjectContainer>
                 {project.map(project => (
-                <Projects key={project.id}>
-                    <ProjectDescription>{project.descricao}</ProjectDescription>
-                    <ProjectActions>
-                        <MaterialCommunityIcons 
-                            name="delete-circle-outline" 
-                            size={36} 
-                            color="#dc3545"
-                            onPress={() => {
-                                handleDeleteProjects(project);
-                            }}
-                        />
-                    </ProjectActions>
-                </Projects>))}
-                <TaskContainer>
-                    {task.map(task => (
-                    <Tasks key={task.id}>
-                        <TaskDescription>{task.descricao}</TaskDescription>
-                        <TaskActions>
-                            <MaterialCommunityIcons
-                                name={task.concluido ? "check-circle-outline" : "circle-outline"}
-                                size={36}
-                                color={task.concluido ? "#18db83" : "#dae3dc"}
-                                onPress={() => {
-                                    handlePutTasks(task);
-                                }}
-                            />
-                        </TaskActions>
-                    </Tasks>))}
-                </TaskContainer>
+                    <Container>
+                        <Projects key={project.id}>
+                            <ProjectDescription>{project.descricao}</ProjectDescription>
+                            <ProjectActions>
+                                <MaterialCommunityIcons 
+                                    name="delete-circle-outline" 
+                                    size={40} 
+                                    color="#dc3545"
+                                    onPress={() => {
+                                        handleDeleteProjects(project);
+                                    }}
+                                />
+                            </ProjectActions>
+                        </Projects>
+                        <TaskContainer>
+                        {task.map(task => (
+                        <Tasks key={task.id}>
+                            <TaskDescription>{task.descricao}</TaskDescription>
+                            <TaskActions>
+                                <MaterialCommunityIcons
+                                    name={task.concluido ? "check-circle-outline" : "circle-outline"}
+                                    size={40}
+                                    color={task.concluido ? "#18db83" : "#dae3dc"}
+                                    onPress={() => {
+                                        handlePutTasks(task);
+                                    }}
+                                />
+                            </TaskActions>
+                        </Tasks>))}
+                        </TaskContainer>
+                    </Container>
+                ))}
             </ProjectContainer>
         </Container>
         </>
